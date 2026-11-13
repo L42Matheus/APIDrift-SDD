@@ -64,6 +64,21 @@ class CliTests(unittest.TestCase):
         self.assertEqual(out["contract_digests"], BASE["spec"]["contract_digests"])
 
 
+    def test_demo_shows_drift_only_ai_catches(self):
+        code, out = _run(["demo", "M11", "--semantic", "--offline",
+                          "--cache", str(ROOT / "llm_cache" / "claude.json")])
+        self.assertEqual(code, 0)
+        levels = out["niveis"]
+        self.assertEqual(levels["L3_sdd"], [])
+        self.assertTrue(any("2.0" in e for e in levels["L4_semantica (só a IA)"]))
+
+    def test_demo_without_llm(self):
+        code, out = _run(["demo", "M01"])
+        self.assertEqual(code, 0)
+        self.assertNotIn("L4_semantica (só a IA)", out["niveis"])
+        self.assertTrue(any("conformidade" in e for e in out["niveis"]["L2_testes_contrato"]))
+
+
 class ClientWiringTests(unittest.TestCase):
     """Confere os parâmetros enviados aos SDKs, com clientes simulados."""
 

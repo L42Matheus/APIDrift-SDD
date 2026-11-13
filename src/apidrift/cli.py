@@ -1,6 +1,6 @@
 """Linha de comando do APIDrift-SDD.
 
-Comandos: validate, fingerprint, semantic-check e mutate.
+Comandos: validate, fingerprint, semantic-check, mutate e demo.
 As chaves de API vêm só do ambiente (ANTHROPIC_API_KEY / OPENAI_API_KEY).
 Saída: 0 consistente, 2 divergências encontradas, 3 falha do LLM.
 """
@@ -16,7 +16,7 @@ import yaml
 from . import bundle as B
 from .core import find_root, versions
 from .llm import PROVIDERS, LLMError, make_client
-from .mutations import run_api_mutation_study
+from .mutations import MUTATIONS, apply, run_api_mutation_study
 from .semantic import ApiSemanticVerifier
 
 
@@ -65,6 +65,11 @@ def build_parser() -> argparse.ArgumentParser:
     m.add_argument("--output", default=None, help="Padrão: <root>/results")
     m.add_argument("--semantic", action="store_true", help="Inclui o nível L4 (LLM)")
     _llm_args(m)
+
+    d = commands.add_parser("demo", help="Aplica uma alteração do estudo (ex.: M11) e mostra o que cada nível aponta")
+    d.add_argument("mutation", choices=[x.id for x in MUTATIONS])
+    d.add_argument("--semantic", action="store_true", help="Inclui o nível L4 (LLM)")
+    _llm_args(d)
     return parser
 
 
@@ -123,6 +128,20 @@ def _main(argv: list[str] | None = None) -> int:
         res = run_api_mutation_study(root, verifier, out,
                                      prefix="api_mutation_llm" if verifier else "api_mutation")
         _print(res["levels"])
+        return 0
+
+    if args.command == "demo":
+        mut = next(x for x in MUTATIONS if x.id == args.mutation)
+        base = B.load_bundle(root, "v2")
+        mb = apply(mut, base, B.load_bundle(root, "v2", "v1")["contract"])
+        report = {"alteracao": mut.id, "artefato": mut.artifact, "descricao": mut.description,
+                  "e_deriva": mut.drift, "niveis": {}}
+        for level, cats in B.LEVELS.items():
+            report["niveis"][level] = [str(i) for i in B.check(mb, root, cats)]
+        if args.semantic:
+            report["niveis"]["L4_semantica (só a IA)"] = [
+                str(i) for i in ApiSemanticVerifier(_client(args)).check(mb)]
+        _print(report)
         return 0
     return 1
 
