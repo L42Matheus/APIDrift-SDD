@@ -1,0 +1,299 @@
+{
+  "041597103b9e50fcffe7b682640a9f89d82828ab2b7238640ef3a0b7918f443d": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "14a6b6b6318cd1334dd2033287fac635f7ad9f84c2ac9194566cc8dd60ebf029": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "223f20d08de550df17f51ba3cd501bcb1cee61a1b41ec623456964f4ae75cdad": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "limiar",
+          "explicacao": "A seção e o REQ-05 descrevem a exceção premium como cancelamento até 1 hora depois/após o despacho, o que pressupõe intervalo de 0 a 1 hora após o despacho. O código só verifica que horasAposDespacho não é nulo e é <= 1.0; não exige limite inferior. Assim, uma solicitação premium marcada como despachada com horasAposDespacho negativo também seria PERMITIDA pelo código, embora não esteja coberta pelo contrato.",
+          "regra_id": "REG-PREMIUM-EXC"
+        }
+      ]
+    }
+  },
+  "26a08223efcad037877a4d04fc9d91cd1e1692506064c2c6e2f40da55680f0e4": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "2a7043fb63ca5ef76cdd7b8de203fa6d5ea71f6c9949dff7548dacfae0d94d1b": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "2f87c975fb9032a65593a3a5e03614370c987cbd5cd8f09dbd8f105952f3fd88": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "limiar",
+          "explicacao": "A seção e o REQ-05 descrevem a exceção premium como cancelamento após/depois do despacho, até 1 hora inclusive, o que restringe o caso ao intervalo de 0 a 1 hora após o despacho. O código exige apenas que horasAposDespacho seja não nulo e <= 1.0; não exige horasAposDespacho >= 0. Assim, para um cliente premium com cancelamento do cliente, despachado=true e horasAposDespacho negativo, sem fraude/falha prioritária, o código PERMITE pela exceção premium, enquanto o contrato não inclui esse caso na exceção pós-despacho.",
+          "regra_id": "REG-PREMIUM-EXC"
+        }
+      ]
+    }
+  },
+  "311579c283c41498be65d286baf4b5b3a56f109edde7ddaf3f0f0ff6ab26e661": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "47beb5d77d4e379e25c15c633e84e0b7f40f6c4a29038872d3d6a4d315bc31b3": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "condicao",
+          "explicacao": "O contrato descreve a exceção premium para cancelamento até 2 horas após/depois do despacho, o que implica cancelamento no intervalo após o despacho. O código exige apenas horasAposDespacho != null e horasAposDespacho <= 2.0, sem validar que o valor seja maior ou igual a zero. Assim, para um cliente premium com pedido marcado como despachado e horasAposDespacho negativo, o código PERMITE, enquanto o contrato não cobriria esse caso como cancelamento após o despacho.",
+          "regra_id": "REG-PREMIUM-EXC / REQ-05"
+        }
+      ]
+    }
+  },
+  "5464ee08614c73f7d58d8a692a764baaa462b4b46471fd8a26ab34e05a29cd56": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "57d1d7494d0cacb7e64e1f7e94645e97d36318446e9a90b32855c8e5f09c530c": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "66608e0658aaf7b42ab33aa4bef3363fa0b4020d9beb1615054a7f11a0478fd8": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "precedencia",
+          "explicacao": "O contrato e o REQ-05 descrevem que cliente premium que cancela até 1 hora após o despacho pode receber PERMITIR como exceção ao cancelamento após despacho. No código, porém, REG-CANCEL-ENVIADO tem prioridade 30 e é avaliada antes de REG-PREMIUM-EXC, que tem prioridade 35. Como REG-CANCEL-ENVIADO retorna true para qualquer cancelamento do cliente após despacho, ela captura também os casos premium dentro de 1 hora e decide NEGAR antes de a exceção premium ser avaliada.",
+          "regra_id": "REG-PREMIUM-EXC / REG-CANCEL-ENVIADO"
+        },
+        {
+          "aspecto": "condicao",
+          "explicacao": "O REQ-03 limita a negativa a cancelamento após despacho 'sem exceção aplicável'. A implementação de REG-CANCEL-ENVIADO não exclui a exceção premium e, por estar antes dela, nega também quando a exceção premium seria aplicável segundo o contrato.",
+          "regra_id": "REG-CANCEL-ENVIADO"
+        }
+      ]
+    }
+  },
+  "6ee44e108784774b92291022faefea7dbbd337260c6c6a403719b19a80df29be": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "limiar",
+          "explicacao": "O contrato e o REQ-05 limitam a exceção premium a cancelamento até 1 hora após o despacho, inclusive. O código executado permite a exceção quando horasAposDespacho <= 2.0. Assim, para cliente premium que cancela após despacho com mais de 1 hora e até 2 horas, sem regra prioritária aplicável, o código decide PERMITIR, enquanto o contrato levaria à negação pela regra geral de cancelamento após despacho.",
+          "regra_id": "REG-PREMIUM-EXC"
+        }
+      ]
+    }
+  },
+  "72f2f8a719a2deb643f5823c13da846c8aa0e13e48e64f9fb525e7402da54d3a": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "74779a8146207e4d4d4d945c18a57e31c99a6ec71d02467fed10d64899987659": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "7e24ccef325d459644fdaa58678a69cd86ed582197b478f1a7415615fe04e4a2": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "excecao",
+          "explicacao": "A descrição da seção afirma de forma absoluta que cancelamento do cliente após despacho é negado. No código, essa decisão não é absoluta: antes da regra de negação, REG-PREMIUM-EXC permite cancelamento de cliente premium até 1 hora após o despacho; além disso, regras prioritárias como fraude e falha operacional podem decidir antes. Portanto, há casos após despacho em que o código não retorna NEGAR.",
+          "regra_id": "secao_do_contrato:cancelamento"
+        },
+        {
+          "aspecto": "precedencia",
+          "explicacao": "A descrição da seção afirma de forma absoluta que cancelamento antes do despacho é permitido. No código, uma suspeita de fraude é avaliada antes da regra de cancelamento pré-despacho e decide REVISAO_HUMANA. Assim, para cancelamento antes do despacho com fraudeSuspeita=true, o código não retorna PERMITIR.",
+          "regra_id": "secao_do_contrato:cancelamento"
+        }
+      ]
+    }
+  },
+  "8077fed91ad9c814d8736f5d81589c37af6623a0c435c05c0d20788dd4f104a6": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "85a120177cf2ed12a5c4662c13602860ab63176fce4c2f4ac6320992f4a09005": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "863a5b055a37443abfb5eb090e4ee6ab25cf92f282dfd35c08c129c1bbfd5a9f": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "limiar",
+          "explicacao": "O contrato e o REQ-05 descrevem a exceção premium para cancelamento até 1 hora após o despacho, inclusive, e a condição executada pelo método também usa horasAposDespacho <= 1.0. Porém, quando essa regra decide, a justificativa retornada pela anotação @RegraPolitica diz “até 2 horas após despacho”. Como a justificativa faz parte do resultado da regra executada, há divergência de limiar na explicação retornada pelo serviço.",
+          "regra_id": "REG-PREMIUM-EXC"
+        }
+      ]
+    }
+  },
+  "8a8140d1791c41288a26b7e31e4a988d3eb90713eafa35b731569c99268c7f58": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "excecao",
+          "explicacao": "A descrição da seção afirma que, após o despacho, o cancelamento é sempre negado. No código, porém, há exceção avaliada antes da negação geral: cliente premium que cancelou até 1 hora após o despacho recebe PERMITIR.",
+          "regra_id": "REG-PREMIUM-EXC"
+        },
+        {
+          "aspecto": "precedencia",
+          "explicacao": "A descrição da seção também é absoluta ao dizer que cancelamento após despacho é sempre negado, mas uma falha operacional de origem restaurante ou transportadora é avaliada antes das regras de cancelamento e decide PERMITIR, inclusive se o pedido já tiver sido despachado.",
+          "regra_id": "REG-FALHA"
+        },
+        {
+          "aspecto": "precedencia",
+          "explicacao": "Para pedido já despachado com suspeita de fraude, o código decide REVISAO_HUMANA antes da regra que nega cancelamento após despacho. Isso contradiz a frase da seção de que após despacho o cancelamento é sempre negado.",
+          "regra_id": "REG-SEG"
+        }
+      ]
+    }
+  },
+  "8d3aa3882fa72f198fdf694374e2c1b93d76a8aaedc1b9d0bd90972a20889532": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "9a846994630344e628dd44000e011245020d23cfbc20bd5caac23e9a8af01568": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "9dcb1e495e03663a8cd408f7e7d12348b24253a9e27135dbcd9b4de80bee335c": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "9dd2cd887240f3fb3db89d7995d8dfd035e6e7e89d817e4769aba8f93f5fe8bc": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "decisao",
+          "explicacao": "Para cancelamento solicitado pelo cliente antes do despacho, sem fraude ou falha operacional prioritária, o contrato/REQ-04 dizem PERMITIR. No código, após as regras prioritárias de fraude e falha, a regra REG-CANCEL-PRE casa quando cancelamentoCliente=true e despachado=false e decide NEGAR. Portanto a decisão efetiva para esse caso é oposta à descrita.",
+          "regra_id": "REG-CANCEL-PRE"
+        }
+      ]
+    }
+  },
+  "b8105a4e1c5bea838193c93fead9694952b1b82b5ad37cb4fb5590b7568d0a0f": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "decisao",
+          "explicacao": "O contrato e o REQ-05 preveem uma exceção para cliente premium que cancela até 1 hora após o despacho, inclusive, sem fraude ou falha prioritária, podendo resultar em PERMITIR. No código não há regra que teste cliente premium nem o limite de 1 hora; nesses casos, se nenhuma regra anterior decidir, REG-CANCEL-ENVIADO é a primeira regra aplicável e retorna NEGAR para qualquer cancelamento do cliente após despacho.",
+          "regra_id": "REG-CANCEL-ENVIADO / REQ-05"
+        }
+      ]
+    }
+  },
+  "bfa3f75940b4ddccf8bf28ee08b084bc6e5670ba68dad2a55cdd2aa78739cdf6": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "cf553a4f3e7f8833bea2ae3a8d1259fdb2248344365fb684e4b37831546c9273": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "cf6a8bf235e92ee4fe0969da3ba08642320c9fc7f7c83c1f67f3d03b340ecf22": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "e12d4aa9fe0c5966f746eed9b63d39c622cb43d0a164263e32cbed96f646d15e": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "e2b2920b2ffb8fe72c5a756acfffc1294bff143e59f95855c4452cdcfa282c5a": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "e91bd527d60045808698d6f354a2f809363707b9a05ebc7e2e5d6fd9c4a413f3": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "f4a1b3272817a85c6f6d2f48caffc4c0271eba99892a29e8337b66a66c05ebec": {
+    "model": "gpt-5.5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "protocol": "api-mutation-v0.1 (gpt-5.5)",
+  "levels": [
+    {
+      "level": "L0_sem_verificacao",
+      "mutants": 19,
+      "tp": 0,
+      "fn": 12,
+      "fp": 0,
+      "tn": 7,
+      "sensitivity": 0.0,
+      "false_alarm_rate": 0.0,
+      "missed": "M01|M02|M03|M04|M05|M06|M07|M08|M09|M10|M11|M12",
+      "false_alarms": "",
+      "decisoes_erradas_liberadas": 9
+    },
+    {
+      "level": "L1_versao",
+      "mutants": 19,
+      "tp": 2,
+      "fn": 10,
+      "fp": 0,
+      "tn": 7,
+      "sensitivity": 0.1667,
+      "false_alarm_rate": 0.0,
+      "missed": "M01|M02|M03|M04|M05|M06|M07|M09|M10|M11",
+      "false_alarms": "",
+      "decisoes_erradas_liberadas": 9
+    },
+    {
+      "level": "L2_testes_contrato",
+      "mutants": 19,
+      "tp": 6,
+      "fn": 6,
+      "fp": 0,
+      "tn": 7,
+      "sensitivity": 0.5,
+      "false_alarm_rate": 0.0,
+      "missed": "M05|M06|M07|M09|M10|M11",
+      "false_alarms": "",
+      "decisoes_erradas_liberadas": 1
+    },
+    {
+      "level": "L3_sdd",
+      "mutants": 19,
+      "tp": 10,
+      "fn": 2,
+      "fp": 2,
+      "tn": 5,
+      "sensitivity": 0.8333,
+      "false_alarm_rate": 0.2857,
+      "missed": "M10|M11",
+      "false_alarms": "N05|N07",
+      "decisoes_erradas_liberadas": 1
+    },
+    {
+      "level": "L4_semantica",
+      "mutants": 19,
+      "tp": 12,
+      "fn": 0,
+      "fp": 6,
+      "tn": 1,
+      "sensitivity": 1.0,
+      "false_alarm_rate": 0.8571,
+      "missed": "",
+      "false_alarms": "N01|N02|N04|N05|N06|N07",
+      "decisoes_erradas_liberadas": 0
+    }
+  ],
+  "mutations": [
+    {
+      "id": "M01",
+      "artifact": "código",
+      "drift": true,
+      "description": "Limiar da exceção premium muda (1h->2h) só no código"
+    },
+    {
+      "id": "M02",
+      "artifact": "código",
+      "drift": true,
+      "description": "Prioridade da exceção premium alterada (perde para a regra geral)"
+    },
+    {
+      "id": "M03",
+      "artifact": "código",
+      "drift": true,
+      "description": "Decisão invertida em REG-CANCEL-PRE"
+    },
+    {
+      "id": "M04",
+      "artifact": "código",
+      "drift": true,
+      "description": "Método da exceção premium removido; contrato ainda a descreve"
+    },
+    {
+      "id": "M05",
+      "artifact": "especificação",
+      "drift": true,
+      "description": "REQ-05 removido; código e contrato ainda o citam"
+    },
+    {
+      "id": "M06",
+      "artifact": "especificação",
+      "drift": true,
+      "description": "Requisito novo sem regra implementada"
+    },
+    {
+      "id": "M07",
+      "artifact": "código",
+      "drift": true,
+      "description": "Justificativa devolvida pela API contradiz o contrato"
+    },
+    {
+      "id": "M08",
+      "artifact": "contrato",
+      "drift": true,
+      "description": "Atualização parcial: seção antifraude ficou na versão 1"
+    },
+    {
+      "id": "M09",
+      "artifact": "contrato",
+      "drift": true,
+      "description": "Descrição de cancelamento perde a exceção, sem revisão"
+    },
+    {
+      "id": "M10",
+      "artifact": "contrato",
+      "drift": true,
+      "description": "Descrição perde a exceção e as marcas são recalculadas"
+    },
+    {
+      "id": "M11",
+      "artifact": "código+testes",
+      "drift": true,
+      "description": "Limiar muda no código, testes são ajustados e marcas recalculadas"
+    },
+    {
+      "id": "M12",
+      "artifact": "contrato",
+      "drift": true,
+      "description": "Contrato OpenAPI v1 inteiro com código v2"
+    },
+    {
+      "id": "N01",
+      "artifact": "código",
+      "drift": false,
+      "description": "Métodos de regra reordenados na classe"
+    },
+    {
+      "id": "N02",
+      "artifact": "contrato",
+      "drift": false,
+      "description": "Seções (tags) reordenadas no contrato"
+    },
+    {
+      "id": "N03",
+      "artifact": "código",
+      "drift": false,
+      "description": "Comentário e formatação no método de fraude"
+    },
+    {
+      "id": "N04",
+      "artifact": "contrato",
+      "drift": false,
+      "description": "Metadados do contrato (contato, servidores)"
+    },
+    {
+      "id": "N05",
+      "artifact": "contrato",
+      "drift": false,
+      "description": "Correção de pontuação na seção de falhas"
+    },
+    {
+      "id": "N06",
+      "artifact": "todos",
+      "drift": false,
+      "description": "Evolução completa e sincronizada (limiar 2h em código, testes, contrato e requisito)"
+    },
+    {
+      "id": "N07",
+      "artifact": "código",
+      "drift": false,
+      "description": "Refatoração: parâmetro renomeado na exceção premium"
+    }
+  ]
+}

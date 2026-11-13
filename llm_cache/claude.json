@@ -1,0 +1,265 @@
+{
+  "0e75d63182c2af24b0ae29ea95df8667e3c968ff557f466e0d3a111b61df359a": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "12d2dd3d1932d2fca54abc0b029704050084ff1d3fd2c8c956922928a85d2a11": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "excecao",
+          "explicacao": "O contrato diz que o cancelamento após o despacho é 'sempre negado'. O código, porém, avalia antes (prioridade 25) a exceção premium: um cliente premium que cancela com até 1 hora do despacho (horasAposDespacho <= 1.0, inclusive) recebe PERMITIR. Essa exceção está prevista no REQ-05 e não aparece no contrato. Nesses casos a decisão real é PERMITIR, e não NEGAR.",
+          "regra_id": "REG-PREMIUM-EXC"
+        },
+        {
+          "aspecto": "precedencia",
+          "explicacao": "O 'sempre negado' do contrato também ignora regras de maior precedência que decidem antes de REG-CANCEL-ENVIADO. Com fraude suspeita (REG-SEG, prioridade 10), o resultado é REVISAO_HUMANA. Com falha operacional do restaurante ou da transportadora (REG-FALHA, prioridade 20), o resultado é PERMITIR. Em ambos os casos o cancelamento após o despacho não é negado. Os requisitos falam em 'normalmente negados' e 'sem exceção aplicável', mas o contrato afirma uma negação incondicional.",
+          "regra_id": "REG-CANCEL-ENVIADO"
+        }
+      ]
+    }
+  },
+  "1a2618d741ce4cd616a57695afbe1bf1c1b16e4e654f154eaf9f5a4bf0438610": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "2337daf6d1c4042f32b5c346e11521dc1d1c7d30c2636976e8c5c3dcac3ac2b7": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "2c3b697dd972cb12ecca7d8d88e8d1e77e10fcae0ea783c291e5ee2f8603b16f": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "2e101e205afe71c354a6af9fc31038d27b0cc23040a3e01f65d23ab30c5c7206": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "35601f6e2666e2ae9b0fce2ce6544c270963a92707756160b1f9d284d401d352": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "43defe41b488ed4dee7f5751c7ac919920fdc0896c4633cc03226fc938c8217e": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "excecao",
+          "explicacao": "O contrato e o REQ-05 preveem uma exceção: cliente premium que cancela até 1 hora após o despacho (inclusive) pode ser reembolsado, salvo fraude ou falha prioritária. No código, REG-CANCEL-ENVIADO nega todo cancelamento do cliente após o despacho (cancelamentoCliente=true e despachado=true). A regra não verifica se o cliente é premium nem o tempo decorrido desde o despacho, e nenhuma regra implementa o REQ-05. Assim, um cliente premium que cancela dentro de 1 hora após o despacho, sem fraude nem falha, recebe NEGAR, quando o contrato indica que ele pode receber PERMITIR. As ressalvas de fraude e de falha estão corretamente cobertas por REG-SEG (prioridade 10) e REG-FALHA (prioridade 20).",
+          "regra_id": "REG-CANCEL-ENVIADO"
+        }
+      ]
+    }
+  },
+  "48d37b3401e3416eda4959fb91c0e1ca6fb60eb2120db37f8343f027d24c5b7a": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "4d4030cf7ec66ddc0a66ab2f6b893780bb37e2c2076da470cd19002610997646": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "532c303f90a0d5ae01451bfd42f858a33f6344d4bdffa09016d70496d965c80a": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "620943d5b79d32f2dbc4f7185f15bf4f3a7e6e527d1334a5393968c3a8cbb162": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "precedencia",
+          "explicacao": "O contrato e o REQ-05 dizem que o cliente premium que cancela até 1 hora após o despacho (inclusive), sem fraude ou falha prioritária, pode ser reembolsado (PERMITIR). No código, porém, REG-CANCEL-ENVIADO (prioridade 30, NEGAR) é avaliada antes de REG-PREMIUM-EXC (prioridade 35). A condição de REG-CANCEL-ENVIADO (cancelamentoCliente && despachado) abrange todos os casos da exceção premium. Por isso, esses casos sempre recebem NEGAR e a exceção nunca é aplicada. Para cumprir o contrato, a exceção premium precisaria de prioridade menor que 30.",
+          "regra_id": "REG-PREMIUM-EXC"
+        }
+      ]
+    }
+  },
+  "620bfb06f43bca377be7fbeb275e43f69f7641acb0e0293dc933c92edbfc897b": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "896f2ba8b6dcba67fe8a4fdd7e979fe62b5c7cab63a9dd059fcd7595a3659945": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "8e7c2c483cd0d3d5baf4afc3ee5a2c4cffeb34534881fea899e810b02e306385": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "9da12f961fddc7cb0cdefaa0731137fcb0216f7e7010f93e8d55f0089c13c43b": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "9e4e81d64307f9c964b8bfb17f1f4f983dd225e49e558be208164c2296ce4369": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "limiar",
+          "explicacao": "O contrato, o REQ-05 e a própria justificativa da anotação limitam a exceção premium a cancelamentos feitos até 1 hora após o despacho (inclusive). O código usa horasAposDespacho() <= 2.0. Assim, um cliente premium que cancela entre 1 e 2 horas após o despacho (ex.: 1,5 h) recebe PERMITIR pela REG-PREMIUM-EXC. Pelo contrato, esse caso deveria ser negado pela REG-CANCEL-ENVIADO.",
+          "regra_id": "REG-PREMIUM-EXC"
+        }
+      ]
+    }
+  },
+  "ab8629e616df5627c8a9d2625adbfaab5ffcb22ffaadac354e5fbc4dc47ca527": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "b26b445d0b1675c3119987985014d1eb411e366e4d0aec3dc46852edcf0b5ead": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "b4039fc34591fe34e5a7ec4dac283c1a1c317e9ca083ba85f74d97e2607ab5c7": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "b50086032d537c04e4ac81d412357002df3c0fb44117b4a55ae927119d191a06": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "c5b248f3f53f3989e295ff6fb7434648fabaed86d9a01fa0ab4f4c5308230faa": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "d026b8816dd09b6f3665c004ab034876e1806260c2b22706be40645288509aee": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "d7a6f88f0839f9fb354b3bab705f8dac1f9b3bf65980714620fa0b1402675145": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "excecao",
+          "explicacao": "A descrição do contrato afirma, sem ressalvas, que o cancelamento após o despacho é negado. O código, porém, avalia antes (prioridade 25) a exceção premium: um cliente premium que cancela com até 1 hora do despacho (inclusive) recebe PERMITIR. Isso está previsto no REQ-05, mas não aparece no contrato, cuja descrição leva a uma decisão errada nesses casos.",
+          "regra_id": "REG-PREMIUM-EXC"
+        },
+        {
+          "aspecto": "precedencia",
+          "explicacao": "O contrato apresenta a negação após o despacho, e a permissão antes dele, como decisões incondicionais. No código, regras de prioridade maior decidem primeiro: com suspeita de fraude (REG-SEG), o resultado é REVISAO_HUMANA; com falha do restaurante ou da transportadora (REG-FALHA), é PERMITIR. Os requisitos REQ-03 e REQ-04 trazem essas ressalvas ('sem exceção aplicável', 'sem fraude/falha prioritária'), mas a descrição do contrato não.",
+          "regra_id": "REG-CANCEL-ENVIADO"
+        }
+      ]
+    }
+  },
+  "dd9f7acf2a3734bd971a1b3893633f363067787a4649cdd18879986ad0c17363": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "e152cdd91fceb4115bb12b9e4d8a9247ce9464c8d017de648f72b896be11b0b5": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "e73873754f9c8123937b6881989b134c498044d4bcb04b7e7e1f7992ca8c7fc5": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "edf12bc8ffc9c62d942cab3fda8c62429cfdb6e2d0ccb629b1b9ec86acd65261": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "ee8c740f6a285708c4400dcbe232a04cea55cf2dadf8ef7e7f144c11a6649d6a": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  },
+  "f0494cf80fbdcc0879b748414b41a52a608c7e0e2d258f064e7fdc28797b92a0": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": false,
+      "divergencias": [
+        {
+          "aspecto": "decisao",
+          "explicacao": "O contrato e o REQ-04 dizem que o cancelamento solicitado pelo cliente antes do despacho é permitido (PERMITIR). No código, a regra REG-CANCEL-PRE devolve NEGAR para cancelamentoCliente=true e despachado=false. Essa decisão vale sempre que não houver fraude nem falha operacional, que são tratadas antes. A decisão fica invertida.",
+          "regra_id": "REG-CANCEL-PRE"
+        }
+      ]
+    }
+  },
+  "fb4818a7a669e13ebbfdfed3033a5fb9bbf52223978a5e25ff4adc585d178d40": {
+    "model": "claude-opus-5-5",
+    "response": {
+      "consistente": true,
+      "divergencias": []
+    }
+  }
+}

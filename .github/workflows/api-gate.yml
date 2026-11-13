@@ -1,0 +1,37 @@
+# Portão de coevolução da API: um pull request que muda o contrato OpenAPI, a
+# especificação ou o código da política só passa se os artefatos continuarem
+# coerentes. L2 = testes do serviço; L3 = rastreabilidade SDD; L4 = LLM (opcional).
+name: API gate
+on:
+  pull_request:
+    paths: ['api/**', 'src/apidrift/**']
+  push:
+    branches: [main]
+    paths: ['api/**', 'src/apidrift/**']
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: L2 - testes do serviço Spring (conformidade e endpoint)
+        run: mvn -B -q -f api/service/pom.xml test
+      - run: python -m pip install ".[llm]"
+      - name: L3 - especificação x contrato OpenAPI x código
+        run: apidrift validate --level L3_sdd
+      - name: L4 - verificação semântica por LLM
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::notice::Segredo ANTHROPIC_API_KEY ausente; L4 não executado."
+            exit 0
+          fi
+          apidrift semantic-check --provider anthropic

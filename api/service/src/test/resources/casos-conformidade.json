@@ -1,0 +1,221 @@
+{
+  "versao_politica": "2",
+  "casos": [
+    {
+      "id": "C01",
+      "solicitacao": {
+        "fraudeSuspeita": true,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "REVISAO_HUMANA"
+    },
+    {
+      "id": "C02",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "restaurante",
+        "cancelamentoCliente": false,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "PERMITIR"
+    },
+    {
+      "id": "C03",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "transportadora",
+        "cancelamentoCliente": false,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "PERMITIR"
+    },
+    {
+      "id": "C04",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "NEGAR"
+    },
+    {
+      "id": "C05",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": true,
+        "horasAposDespacho": 0.5
+      },
+      "esperado": "PERMITIR"
+    },
+    {
+      "id": "C06",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": true,
+        "horasAposDespacho": 1.0
+      },
+      "esperado": "PERMITIR"
+    },
+    {
+      "id": "C07",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": true,
+        "horasAposDespacho": 1.2
+      },
+      "esperado": "NEGAR"
+    },
+    {
+      "id": "C08",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": false,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "PERMITIR"
+    },
+    {
+      "id": "C09",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": null,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "REVISAO_HUMANA"
+    },
+    {
+      "id": "C10",
+      "solicitacao": {
+        "fraudeSuspeita": true,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": true,
+        "horasAposDespacho": 0.3
+      },
+      "esperado": "REVISAO_HUMANA"
+    },
+    {
+      "id": "C11",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": false,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "REVISAO_HUMANA"
+    },
+    {
+      "id": "C12",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "restaurante",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "PERMITIR"
+    },
+    {
+      "id": "C13",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": true,
+        "horasAposDespacho": null
+      },
+      "esperado": "NEGAR"
+    },
+    {
+      "id": "C14",
+      "solicitacao": {
+        "fraudeSuspeita": true,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": false,
+        "clientePremium": true,
+        "horasAposDespacho": null
+      },
+      "esperado": "REVISAO_HUMANA"
+    },
+    {
+      "id": "C15",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": 0.3
+      },
+      "esperado": "NEGAR"
+    },
+    {
+      "id": "C16",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": 10
+      },
+      "esperado": "NEGAR"
+    },
+    {
+      "id": "C17",
+      "solicitacao": {
+        "fraudeSuspeita": true,
+        "falhaOrigem": "transportadora",
+        "cancelamentoCliente": false,
+        "despachado": true,
+        "clientePremium": false,
+        "horasAposDespacho": null
+      },
+      "esperado": "REVISAO_HUMANA"
+    },
+    {
+      "id": "C18",
+      "solicitacao": {
+        "fraudeSuspeita": false,
+        "falhaOrigem": "nenhuma",
+        "cancelamentoCliente": true,
+        "despachado": true,
+        "clientePremium": true,
+        "horasAposDespacho": 0.0
+      },
+      "esperado": "PERMITIR"
+    }
+  ]
+}

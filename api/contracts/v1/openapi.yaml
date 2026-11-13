@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: API de Reembolsos
+  version: '1'
+  description: Decide solicitações de reembolso e cancelamento de uma plataforma fictícia de pedidos. As seções
+    (tags) descrevem a política que o serviço aplica.
+tags:
+- name: antifraude
+  description: Fraude suspeita exige revisão humana. Regra de segurança tem precedência sobre reembolsos.
+  x-apidrift:
+    title: Antifraude e validação
+    policy-version: '1'
+    requirement_ids:
+    - REQ-01
+    rule_fingerprints:
+      REG-SEG: aa4e01974ce947c279affcce6d4a9c24d95ca8e46c72fcd1f299ae2c997a9760
+- name: falhas-operacionais
+  description: Falha causada pelo restaurante ou transportadora gera elegibilidade de reembolso, exceto fraude suspeita.
+  x-apidrift:
+    title: Falhas operacionais
+    policy-version: '1'
+    requirement_ids:
+    - REQ-02
+    rule_fingerprints:
+      REG-FALHA: a673b2e829e7468bcae580a662c06cd28fbf1ead3640b37348d1296a0879636d
+- name: cancelamento
+  description: Cancelamento do cliente após despacho é negado. Antes do despacho, é permitido.
+  x-apidrift:
+    title: Cancelamento de pedido
+    policy-version: '1'
+    requirement_ids:
+    - REQ-03
+    - REQ-04
+    rule_fingerprints:
+      REG-CANCEL-ENVIADO: 82769d0b560b18ff4e1952e2089f889763eda707c6c2633c253e5d52ff090673
+      REG-CANCEL-PRE: 1bc25f556d2bcbcdcf846b58245019e5506336dc11a69526c1121b559cacd545
+paths:
+  /reembolsos/decisoes:
+    post:
+      operationId: decidirReembolso
+      tags:
+      - antifraude
+      - falhas-operacionais
+      - cancelamento
+      summary: Decide uma solicitação de reembolso ou cancelamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Solicitacao'
+      responses:
+        '200':
+          description: Decisão, regra aplicada e justificativa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resultado'
+components:
+  schemas:
+    Solicitacao:
+      type: object
+      description: Fatos estruturados da solicitação. Campo ausente significa desconhecido.
+      properties:
+        fraudeSuspeita:
+          type: boolean
+          description: Indício de fraude apontado pelo antifraude.
+        falhaOrigem:
+          type: string
+          description: Origem da falha operacional, se houver.
+          example: transportadora
+        cancelamentoCliente:
+          type: boolean
+          description: O cliente pediu o cancelamento.
+        despachado:
+          type: boolean
+          description: O pedido já foi despachado.
+        clientePremium:
+          type: boolean
+          description: O cliente é assinante premium.
+        horasAposDespacho:
+          type: number
+          format: double
+          description: Horas entre o despacho e o pedido de cancelamento.
+    Resultado:
+      type: object
+      required:
+      - decisao
+      - versaoPolitica
+      properties:
+        decisao:
+          type: string
+          enum:
+          - PERMITIR
+          - NEGAR
+          - REVISAO_HUMANA
+        regraId:
+          type: string
+          nullable: true
+          description: Regra que decidiu; nulo quando vale a decisão padrão.
+        justificativa:
+          type: string
+        versaoPolitica:
+          type: string

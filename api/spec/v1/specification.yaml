@@ -1,0 +1,51 @@
+study: APIDrift-SDD
+version: '1'
+effective_date: '2026-11-10'
+service: api-reembolso
+artifacts:
+  code: service/src/main/java/br/edu/ifpb/lis/reembolso/politica/PoliticaReembolso.java
+  contract: contracts/v1/openapi.yaml
+  conformance: service/src/test/resources/casos-conformidade.json
+requirements:
+- id: REQ-01
+  description: Casos de fraude suspeita exigem avaliação humana antes de qualquer reembolso.
+  acceptance_criterion: Se fraude_suspeita=true, decisão REVISAO_HUMANA independentemente das outras condições.
+- id: REQ-02
+  description: Falhas atribuídas a restaurante ou transportadora podem gerar reembolso.
+  acceptance_criterion: Se falha_origem in [restaurante,transportadora] e não há fraude, decisão PERMITIR.
+- id: REQ-03
+  description: Cancelamentos solicitados pelo cliente após o despacho são normalmente negados.
+  acceptance_criterion: 'Cliente cancelou após despacho, sem exceção aplicável: NEGAR.'
+- id: REQ-04
+  description: Cancelamento solicitado antes do despacho é permitido.
+  acceptance_criterion: 'Cliente cancelou antes do despacho, sem fraude/falha prioritária: PERMITIR.'
+rules:
+- id: REG-SEG
+  priority: 10
+  decision: REVISAO_HUMANA
+  requirement_ids:
+  - REQ-01
+  documented_in: antifraude
+- id: REG-FALHA
+  priority: 20
+  decision: PERMITIR
+  requirement_ids:
+  - REQ-02
+  documented_in: falhas-operacionais
+- id: REG-CANCEL-ENVIADO
+  priority: 30
+  decision: NEGAR
+  requirement_ids:
+  - REQ-03
+  documented_in: cancelamento
+- id: REG-CANCEL-PRE
+  priority: 40
+  decision: PERMITIR
+  requirement_ids:
+  - REQ-04
+  documented_in: cancelamento
+default_decision: REVISAO_HUMANA
+contract_digests:
+  antifraude: 306a1893b6b6e537fc1052d97ee06b77ca645477e014de7620f7cffa074f757d
+  falhas-operacionais: 68973c4a4738816d002af99fd57c5ace00e6bed0531cb3863738a7cd3fc3bf3f
+  cancelamento: 74b444df2427b8367a7e6f31fdc7dbe6d7701f5ee9d25e223489afd78a0303ba

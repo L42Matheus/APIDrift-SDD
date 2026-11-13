@@ -1,0 +1,24 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: mvn -B -q -f api/service/pom.xml test
+      - run: python -m pip install ".[llm]"
+      - run: python -m unittest discover -s tests -v
+      - run: apidrift mutate --output /tmp/results
+      - name: L4 reproduzido do cache (sem chave de API)
+        run: apidrift mutate --semantic --offline --cache llm_cache/claude.json --output /tmp/results

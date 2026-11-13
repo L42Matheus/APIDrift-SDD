@@ -1,0 +1,5 @@
+level,mutants,tp,fn,fp,tn,sensitivity,false_alarm_rate,missed,false_alarms,decisoes_erradas_liberadas
+L0_sem_verificacao,19,0,12,0,7,0.0,0.0,M01|M02|M03|M04|M05|M06|M07|M08|M09|M10|M11|M12,,9
+L1_versao,19,2,10,0,7,0.1667,0.0,M01|M02|M03|M04|M05|M06|M07|M09|M10|M11,,9
+L2_testes_contrato,19,6,6,0,7,0.5,0.0,M05|M06|M07|M09|M10|M11,,1
+L3_sdd,19,10,2,2,5,0.8333,0.2857,M10|M11,N05|N07,1

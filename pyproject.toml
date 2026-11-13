@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apidrift-sdd"
+version = "0.1.0"
+description = "Detecção de deriva entre especificação, contrato OpenAPI e código Spring, com verificação semântica por IA generativa"
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6.0,<7"]
+
+[project.optional-dependencies]
+# Verificação semântica (L4). Os níveis L1-L3 não dependem de LLM.
+llm = ["anthropic>=2.8,<3", "openai>=2.54,<3"]
+
+[project.scripts]
+apidrift = "apidrift.cli:entrypoint"
+
+[tool.setuptools.packages.find]
+where = ["src"]
